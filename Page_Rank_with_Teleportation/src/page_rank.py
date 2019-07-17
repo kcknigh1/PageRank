@@ -3,7 +3,7 @@ from fractions import Fraction
 # This program is used to calculate the page ranks from a file provided.
 # The file provide should have pairs of numbers seprated by a space. 
 # The first number is where it is comming from and the second is where it is going to
-# This implementation does not have Random Teleportation implemented
+# This implementation does have Random Teleportation implemented
 # 
 # The results are saved to results directory with with results_ followed by the original file name
 # 
@@ -14,8 +14,9 @@ def compute(file):
     graph = read_in_array(file)
     matrix = adjacency_matrix(graph)
     calc_outs(matrix)
-    ranks = calc_ranks(matrix)
-    write_to_file(file, ranks, matrix)
+    teleported_matrix = add_teleport(matrix)
+    ranks = calc_ranks(teleported_matrix)
+    write_to_file(file, ranks, teleported_matrix)
     print("calculated results for "+file)
 
 # Reads in a file and prints the contents
@@ -82,6 +83,25 @@ def calc_ranks(matrix):
             return ranks
     return ranks
 
+# this adds a using a teleport paramater value of 0.85
+# calcultes the the new valus for the matrix are
+def add_teleport(matrix):
+    num_pages = len(matrix)
+    teleport_matrix = [[0 for x in range(num_pages)] for y in range(num_pages)]
+    i = 0
+    for row in matrix:
+        j = 0
+        for index in row:
+            teleport_matrix[i][j] = index*Fraction(17,20) + Fraction(1,num_pages)*Fraction(3,20)
+            j += 1
+        i += 1
+    return teleport_matrix
+
+# calculats what the value of the teleport is
+def calc_teleport_value(original, num_pages):
+    return original*Fraction(17/20) + Fraction(1/num_pages)*Fraction(3/20)
+    # return  Fraction(1,num_pages)*Fraction(3,20)
+
 # checks to see if convergence has been reached
 def check_for_convergence(old, new):
     converge = []
@@ -99,18 +119,19 @@ def check_for_convergence(old, new):
 def write_to_file(name, ranks, matrix):
     with open("results/results_"+name, "w") as file:
         file.write('Results for {}\n\n'.format(name))
-        file.write('With denomanator limited to less than 100,000\nit took {} iterations\n\n'.format(len(ranks)-1))       
+        file.write('With denomanator limited to less than 100,000\nit took {} iterations\n\n'.format(len(ranks)-1))
+        
         # print matrix
         file.write("Graph of Connections\n")
         file.write('{:4}'.format(' X axis: Page From\n Y axis: Page To\n Divided By number of connections\n\n'))
         file.write('{:4}'.format(''))
         for num in range(len(matrix)):
-            file.write('{:^5}'.format(':'+str(num)+':'))
+            file.write('{:^7}'.format(':'+str(num)+':'))
         file.write('\n')
         for num in range(len(matrix)):
             file.write('{:>4}: '.format(':'+str(num)))
             for rank in matrix[num]:
-                file.write('{:5}'.format(str(rank)))
+                file.write('{:7}'.format(str(rank)))
             file.write('\n')
 
         # print results
@@ -136,7 +157,8 @@ def write_to_file(name, ranks, matrix):
 
 
 #this is the main runs this program on all the provided data files
-if __name__ == '__main__':    
+if __name__ == '__main__':
+    
     compute("graph3V.txt")
     compute("graph3VDead.txt")
     compute("graph3VSpider.txt")

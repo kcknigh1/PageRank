@@ -16,7 +16,7 @@ run program: python src/page_rank.py
 
 
 ##############
-Results Sample
+Sample Results
 ##############
 
 Results for graph3V.txt

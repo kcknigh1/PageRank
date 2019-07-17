@@ -1,0 +1,51 @@
+Page_Rank_with_Teleprtation
+
+This program is used to calculate the page ranks from a file provided.
+The file provide should have pairs of numbers seprated by a space. 
+The first number is where it is comming from and the second is where it is going to
+This implementation does have Random Teleportation implemented
+
+The results are saved to results directory with with results_ followed by the original file name
+A sample of the results returned follows
+
+Data directory stores all the original files this was tested on.
+
+run test: python -m pytest -v
+
+run program: python src/page_rank.py
+
+
+##############
+Sample Results
+##############
+
+Results for graph3V.txt
+
+With denomanator limited to less than 100,000
+it took 7 iterations
+
+Graph of Connections
+ X axis: Page From
+ Y axis: Page To
+ Divided By number of connections
+
+      :0:    :1:    :2:  
+  :0: 19/40  19/40  1/20   
+  :1: 19/40  1/20   9/10   
+  :2: 1/20   19/40  1/20   
+
+
+Vertix ID, PageRank Value
+        0,0.379     
+        1,0.406     
+        2,0.215     
+
+iter page 0         page 1         page 2         
+  0: 1/3            1/3            1/3            
+  1: 1/3            19/40          23/120         
+  2: 1889/4800      851/2400       403/1600       
+  3: 23549/64000    8963/20779     19267/96000    
+  4: 26395/67731    16453/43645    13963/59844    
+  5: 24623/65515    26412/63805    8245/39222     
+  6: 34503/89465    29357/75582    14963/66229    
+  7: 37679/99422    19245/47408    7607/35369     
